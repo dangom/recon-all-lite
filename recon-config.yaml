@@ -1,0 +1,45 @@
+# #################################### #
+# # Configuration File for recon-all # #
+# #################################### #
+# This file should be given as input to recon-all-lite.
+
+# FreeSurfer Options
+# The Freesurfer installation
+FREESURFER_HOME: /usr/local/freesurfer/7.1.1
+
+# Subject Definition
+# The FreeSurfer default output directory
+SUBJECTS_DIR: /cluster/osc/data/fs-tests/fs
+# The Freesurfer subject folder name
+SUBJECT: testsmk-spm
+# The input dataset for processing.
+INPUT_T1: /cluster/osc/data/fs-tests/datasets/preproc-bfc_T1w.nii.gz
+SPM_NONBRAIN: /cluster/osc/data/fs-tests/datasets/spm_nonbrain.mgz
+SPM_WM: /cluster/osc/data/fs-tests/datasets/wm.mgz
+
+###########################
+# WM Segmentation options #
+###########################
+# The parameters of interest here are wm_low and gray_hi.
+# In order to choose them appropriately, normalize your input data using mri_normalize
+# and look at the lowest values of WM and largest values of GM in your regions of interest.
+# Set wm_low to be 2% higher then the lowest value of WM, and 2% lower then the highest value of GM.
+# Example:
+# $ mri_convert input_T1.nii.gz input_T1.mgz --conform_min
+# $ mri_normalize input_T1.mgz input_T1.norm.mgz
+# $ freeview input_T1.norm.mgz
+SEGMENTATION:
+  wsizemm: 13
+  wm_low: 105  # recon-all default: 90
+  gray_hi: 95  # recon-all default: 100
+  gray_low: 35  # recon-all default: 30
+  iterations: 2
+
+
+###################
+# Surface options #
+###################
+SURFACES:
+  preparc_smoothing: 3  # recon-all default: 5
+  max_cbv_dist: 2  # only used in longitudinal recon-all, default 3.5
+  face_area: 0.4  # recon-all default: 0.5
