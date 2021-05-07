@@ -1,0 +1,32 @@
+#+TITLE: Recon-all Lite
+
+* What is this?
+
+This is a minimal reimplementation of FreeSurfers =recon-all= script. It doesn't support all of the features of recon-all, but mimicks the entire single-subject stream. It's implemented as a [[https://snakemake.readthedocs.io/en/stable/][Snakefile]]
+, which is like a Makefile but written in a python-like language.
+The goal of the project was to educate myself on the inner workings of =recon-all=, and learn where each file is coming from and where it is created in the pipeline.
+
+As a side effect, =recon-all-lite= helped me minimize FreeSurfer's implicit dependency on subject ID and SUBJECTS_DIR in order to run commands.  That's because by specifying, explicitly, all required inputs and all generated/modified outputs at each step, and leveraging snakemake's dependency tracking algorithm, it is possible to determine which commands have to be run to generate any given file from the recon-all stream.
+
+Some other ideas I've been toying with, which may end up here:
+
+- Supplying my own brainmask to FreeSurfer to aid pial surface segmentation as part of the stream.
+- Substituting the bias field correction algorithm.
+- Injecting my own GM segmentation.
+- Fine tuning parameters for generating surfaces out of 7T high-res data.
+
+* Dependencies
+
+=recon-all-lite= is built with Snakemake, and thus depends on:
+
+- FreeSurfer 7.1.1, and
+- snakemake
+
+* Usage
+
+Use it as you would use any Snakefile workflow.
+
+#+begin_src sh
+# Run this to run the stream up until generation of white and pial surfaces
+snakemake --configfile subjID.yaml --cores all surf/{l,r}h.{white,pial}
+#+end_src
